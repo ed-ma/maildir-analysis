@@ -1,3 +1,6 @@
 *png
 *pdf
 /Maildir
+.Rproj.user
+*.Rproj
+results.tsv
