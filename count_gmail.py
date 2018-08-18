@@ -41,9 +41,9 @@ for intermsg in inbox.items():
     to = cls_mail(msg.get("To"))
 
     sender_domain = '.'.join(sender.split("@")[1].split(".")[-2:])
-    to_domain = '.'.join(to.split("@")[1].split(".")[-2:])
+    #to_domain = '.'.join(to.split("@")[1].split(".")[-2:])
 
     msg_size = intermsg[0].split(",")[1].split("=")[1]
 
     # put it together and output
-    print("\t".join([str(date), to, sender, to_domain, sender_domain, msg_size]))
+    print("\t".join([str(date), to, sender, sender_domain, msg_size]))
