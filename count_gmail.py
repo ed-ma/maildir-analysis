@@ -2,7 +2,7 @@
 
 import mailbox
 import rfc822
-import email.utils
+import email
 import time
 import sys
 import os.path
@@ -11,9 +11,18 @@ md_name = os.path.expanduser(sys.argv[1])
 
 inbox = mailbox.Maildir(md_name, factory=None)
 
-for msg in inbox:
-    flags = msg.get_flags()
+def cls_mail(mail_str):
+  if mail_str == None:
+    mail_str = "NA"
+  else:
+    mail_str = email.utils.parseaddr(mail_str)[1]
+  return mail_str
+
+
+for intermsg in inbox.items():
+    #flags = msg.get_flags()
     #date = msg.get_date()
+    msg = intermsg[1]
     date = msg.get("Date")
 
     if date == None:
@@ -25,23 +34,16 @@ for msg in inbox:
         else:
             date = time.mktime(date)
 
-    precedence = msg.get("Precedence")
-    if precedence == None:
-        precedence = "NA"
-    
-    google = "FALSE"
-    recvd_list = msg.get_all("Received")
 
-    # skip this message if there are no received headers (malformed?)
-    if recvd_list == None:
-        continue
+    #delivered = cls_mail(msg.get("Delivered-To"))
+    #sender = cls_mail(msg.get("Sender"))
+    sender= cls_mail(msg.get("From"))
+    to = cls_mail(msg.get("To"))
 
-    # if there is a list of received headers, skip
-    for recvd in recvd_list:
-        if "google.com" in recvd or "gmail.com" in recvd or "googlemail.com" in recvd:
-            google = "TRUE"
+    sender_domain = '.'.join(sender.split("@")[1].split(".")[-2:])
+    to_domain = '.'.join(to.split("@")[1].split(".")[-2:])
 
-    # put it together and output        
-    print("\t".join([flags, str(date), precedence, google]))
+    msg_size = intermsg[0].split(",")[1].split("=")[1]
 
-
+    # put it together and output
+    print("\t".join([str(date), to, sender, to_domain, sender_domain, msg_size]))
