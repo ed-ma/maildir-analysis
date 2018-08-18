@@ -40,10 +40,20 @@ for intermsg in inbox.items():
     sender= cls_mail(msg.get("From"))
     to = cls_mail(msg.get("To"))
 
-    sender_domain = '.'.join(sender.split("@")[1].split(".")[-2:])
-    #to_domain = '.'.join(to.split("@")[1].split(".")[-2:])
+    if len(sender.split("@")) >= 1:
+      sender_domain = '.'.join(sender.split("@")[1].split(".")[-2:])
+    else:
+      sender_domain = "NA"
 
-    msg_size = intermsg[0].split(",")[1].split("=")[1]
+    if len(to.split("@")) >= 1:
+      to_domain = '.'.join(to.split("@")[1].split(".")[-2:])
+    else:
+      to_domain = "NA"
+
+    if intermsg[0].split(",") >= 1:
+      msg_size = intermsg[0].split(",")[1].split("=")[1]
+    else:
+      msg_size = "NA"
 
     # put it together and output
     print("\t".join([str(date), to, sender, sender_domain, msg_size]))
